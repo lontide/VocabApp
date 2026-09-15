@@ -1,18 +1,35 @@
 {
+  "id": "vocab-app-pwa",
   "name": "구슬쌤 실전 영어 단어장",
   "short_name": "영어단어장",
-  "description": "구슬쌤 영상 핵심 총정리 1~50탄 실전 영어 단어장",
+  "description": "구슬쌤 영상 핵심 총정리 1~50탄 2,500개 실전 영어 단어장",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait-primary",
   "background_color": "#0f172a",
   "theme_color": "#4f46e5",
+  "lang": "ko",
+  "categories": ["education", "books"],
   "icons": [
     {
-      "src": "./icon.svg",
-      "sizes": "192x192 512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

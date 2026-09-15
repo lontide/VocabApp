@@ -21,6 +21,7 @@ import { ResultView } from './components/ResultView';
 import { RoundSelectorModal } from './components/RoundSelectorModal';
 import { WordListModal } from './components/WordListModal';
 import { MobileConnectModal } from './components/MobileConnectModal';
+import { InstallAppBanner } from './components/InstallAppBanner';
 
 const data = wordlistDataRaw as WordlistData;
 
@@ -267,6 +268,9 @@ export const App: React.FC = () => {
         isOpen={isMobileModalOpen}
         onClose={() => setIsMobileModalOpen(false)}
       />
+
+      {/* PWA Chrome App Install Banner */}
+      <InstallAppBanner />
     </div>
   );
 };
