@@ -60,7 +60,7 @@ export const InstallAppBanner: React.FC = () => {
   return (
     <>
       {/* Floating Bottom Install Prompt Banner for Mobile / Desktop */}
-      <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-md z-40 animate-in slide-in-from-bottom duration-300">
+      <div data-testid="install-banner" className="max-w-4xl mx-auto px-3 mt-6">
         <div className="bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-900 border border-indigo-500/50 rounded-2xl p-3.5 shadow-2xl backdrop-blur-lg flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-lg shrink-0 shadow-md shadow-indigo-600/40">

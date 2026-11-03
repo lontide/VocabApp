@@ -55,3 +55,25 @@ export function summary(items: WordItem[], mode: QuizMode, records: Records) {
     percentage: items.length ? Math.round((mastered / items.length) * 100) : 0,
   };
 }
+
+export type ListFilter = "all" | "unassessed" | Status;
+export function filterList(
+  items: WordItem[],
+  mode: QuizMode,
+  records: Records,
+  query: string,
+  filter: ListFilter,
+) {
+  const q = query.trim().toLocaleLowerCase();
+  return items.filter((item) => {
+    const text = studyText(item, mode);
+    const status = records[statusKey(item.id, mode)];
+    return (
+      (!q ||
+        text.questionText.toLocaleLowerCase().includes(q) ||
+        text.correctAnswerText.toLocaleLowerCase().includes(q)) &&
+      (filter === "all" ||
+        (filter === "unassessed" ? !status : status === filter))
+    );
+  });
+}

@@ -81,3 +81,7 @@ npm run dev
 ### 공개 배포 검증
 
 2026-11-04, 구현 커밋 a1b7137: GitHub Actions Validate/Deploy 실행 후 https://lontide.github.io/VocabApp/ 에서 TEST_URL을 설정해 npm run test:browser를 실행했다. Edge 390×844에서 PASS. 목록 50개, 초기/개별 공개, 평가 전환, 모드 독립성, 새로고침 저장, 섞기 안정성과 원본 복원, 카드 왕복, 가로 넘침 없음 및 객관식/단축키 안내 제거를 확인했다. 실제 Android/iOS 기기·TTS/설치·스크린리더 검증을 대체하지 않는다.
+
+## UI 편의 개선 검증
+
+2026-11-04: npm run check에서 assertion 13개와 빌드 통과(기존 확장 TODO 12개 유지). node tests/ui-browser.mjs가 Edge 320/390/1280px에서 통과했다. 기존 node tests/browser.mjs도 통과. 검색·필터·평가 후 행 유지·새로고침·빈 결과 초기화·답안 재가림·고정 도구막대·맨 위 이동·설치 안내 비고정·가로 넘침을 확인했다. 390px 스크린샷 시각 검토 완료.

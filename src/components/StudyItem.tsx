@@ -35,8 +35,8 @@ export function StudyItem({
       <button
         className="w-full text-left min-h-14 p-4 rounded-xl bg-slate-900 whitespace-pre-wrap break-words"
         aria-expanded={revealed}
-        aria-label={revealed ? "공개된 답안" : "답안 공개"}
-        onClick={() => setRevealed(true)}
+        aria-label={revealed ? "답안 다시 가리기" : "답안 공개"}
+        onClick={() => setRevealed((value) => !value)}
       >
         {revealed ? text.correctAnswerText : "탭하여 답안 확인"}
       </button>

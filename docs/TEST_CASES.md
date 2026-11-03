@@ -127,3 +127,5 @@
 - UI-05: 답안 공개 후 재가림 시 답은 숨고 평가·카드 진행은 변하지 않는다.
 
 자동 검증: tests/list-filter.test.mjs, 브라우저 검증: node tests/ui-browser.mjs. 구현 전에는 실패하는 테스트다.
+
+UI-01~UI-05 구현 후 list-filter.test.mjs와 ui-browser.mjs(320/390/1280px), 기존 browser.mjs가 로컬에서 통과했다. 실제 휴대폰 검증을 의미하지 않는다.

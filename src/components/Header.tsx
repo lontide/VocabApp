@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="w-full bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-30 px-3 py-2.5 sm:px-6">
-      <div className="max-w-4xl mx-auto flex items-center justify-between gap-2">
+      <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         {/* App Title */}
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 text-white font-black text-lg">
@@ -41,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <h1 className="font-bold text-base sm:text-lg text-white leading-none">
+              <h1 className="font-bold text-base sm:text-lg text-white leading-none whitespace-nowrap">
                 실전 영어 단어장
               </h1>
               <span className="hidden sm:inline-block text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
@@ -55,7 +55,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center justify-between sm:justify-end gap-1.5 sm:gap-2">
           {/* Round Selector Trigger Button */}
           <button
             onClick={onOpenRoundSelector}
