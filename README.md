@@ -11,8 +11,8 @@
   4. 한국어 문장 ➔ 영어 예문 맞히기
 - **학습 스타일 선택**: 플래시카드(암기 및 자가진단) & 4지선다 퀴즈(객관식 테스트)
 - **발음 듣기 (Web Speech API TTS)**: 단어 및 예문 원어민 발음 재생
-- **반응형 & PWA 지원**: 모바일 터치 및 PC 키보드 단축키 지원, 홈 화면에 앱으로 설치 가능
-- **오답 노트 & 북마크**: 틀린 단어 재도전, 즐겨찾기 저장 (Local Storage)
+- **반응형 & 설치 안내**: 모바일 터치·PC 키보드 단축키, manifest와 홈 화면 설치 안내 제공 (설치 가능 여부는 브라우저에 따라 다르며 오프라인 캐시는 미구현)
+- **세션 오답 재시도 & 북마크**: 현재 학습의 틀린 단어 재도전, 북마크는 Local Storage에 저장
 - **전체 사전 검색**: 2,500개 표현 실시간 검색
 
 ## 🚀 GitHub Pages 배포 방법
@@ -39,4 +39,4 @@ git push -u origin main
 ## 개발 및 검증 Harness
 
 Node.js 24에서 `npm ci` 후 `npm run check`로 자동 테스트와 프로덕션 빌드를 실행합니다.
-작업 지침은 [AGENTS.md](AGENTS.md), 구현 현황과 수동 점검은 [docs/HARNESS.md](docs/HARNESS.md)를 참고하세요.
+현재 기능·데이터 계약은 [SPEC.md](SPEC.md), 후속 작업은 [TASKS.md](TASKS.md), 작업 지침은 [AGENTS.md](AGENTS.md), 실행·검증 절차는 [docs/HARNESS.md](docs/HARNESS.md)를 참고하세요.
