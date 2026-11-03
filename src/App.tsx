@@ -11,6 +11,7 @@ import {
   filterList,
   ListFilter,
 } from "./utils/study";
+import { OrderControl } from "./components/OrderControl";
 import { Header } from "./components/Header";
 import { ModeTabs } from "./components/ModeTabs";
 import { StudyItem } from "./components/StudyItem";
@@ -109,25 +110,14 @@ export default function App() {
         studyStyle={style}
         onSelectStudyStyle={view}
       />
-      <div className="max-w-4xl mx-auto p-3">
-        <label className="flex items-center gap-3">
-          학습 순서{" "}
-          <select
-            aria-label="학습 순서"
-            className="bg-slate-800 rounded-xl p-3"
-            value={order}
-            onChange={(e) => {
-              const next = e.target.value as Order;
-              setOrder(next);
-              storage.saveOrder(next);
-              restart(null);
-            }}
-          >
-            <option value="original">원본 순서</option>
-            <option value="shuffle">섞기</option>
-          </select>
-        </label>
-      </div>
+      <OrderControl
+        value={order}
+        onChange={(next) => {
+          setOrder(next);
+          storage.saveOrder(next);
+          restart(null);
+        }}
+      />
       <main className="max-w-4xl mx-auto p-3 space-y-3">
         {style === "list" ? (
           <section aria-label="어휘 리스트" className="space-y-3">

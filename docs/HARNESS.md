@@ -85,3 +85,5 @@ npm run dev
 ## UI 편의 개선 검증
 
 2026-11-04: npm run check에서 assertion 13개와 빌드 통과(기존 확장 TODO 12개 유지). node tests/ui-browser.mjs가 Edge 320/390/1280px에서 통과했다. 기존 node tests/browser.mjs도 통과. 검색·필터·평가 후 행 유지·새로고침·빈 결과 초기화·답안 재가림·고정 도구막대·맨 위 이동·설치 안내 비고정·가로 넘침을 확인했다. 390px 스크린샷 시각 검토 완료.
+
+UI-06: node tests/order-browser.mjs가 Edge 320/390/1280px에서 통과했다. 버튼 선택·48px 높이·같은 버튼 반복 시 답안 공개 보존·저장·원본 복원·Tab/Enter를 검증했다. 기존 browser.mjs와 ui-browser.mjs도 통과했으며 npm run check는 assertion 13개 통과/기존 TODO 12개 및 빌드 성공. 390px 스크린샷 시각 검토 완료.
