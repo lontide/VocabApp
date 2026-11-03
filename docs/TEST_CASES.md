@@ -129,3 +129,7 @@
 자동 검증: tests/list-filter.test.mjs, 브라우저 검증: node tests/ui-browser.mjs. 구현 전에는 실패하는 테스트다.
 
 UI-01~UI-05 구현 후 list-filter.test.mjs와 ui-browser.mjs(320/390/1280px), 기존 browser.mjs가 로컬에서 통과했다. 실제 휴대폰 검증을 의미하지 않는다.
+
+## UI-06 순서 선택 버튼
+
+320/390/1280px에서 초기 원본 선택, 두 버튼의 48px 터치 높이, 선택 aria-pressed 상호 배타성, 섞기 유지/원본 복원, 같은 버튼 재선택 시 공개 상태 유지, 새로고침 저장, Tab/Enter 조작, 가로 넘침을 tests/order-browser.mjs로 검증한다. 기존 browser.mjs도 드롭다운 대신 버튼을 사용하도록 갱신한다.

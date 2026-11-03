@@ -62,7 +62,7 @@ try {
     "true",
   );
   const original = await rows.locator("p").allTextContents();
-  await page.getByLabel("학습 순서", { exact: true }).selectOption("shuffle");
+  await page.getByRole("button", {name:"섞기",exact:true}).click();
   const shuffled = await rows.locator("p").allTextContents();
   await rows
     .first()
@@ -74,7 +74,7 @@ try {
     .click();
   await page.getByRole("button", { name: "어휘 리스트", exact: true }).click();
   assert.deepEqual(await rows.locator("p").allTextContents(), shuffled);
-  await page.getByLabel("학습 순서", { exact: true }).selectOption("original");
+  await page.getByRole("button", {name:"원본 순서",exact:true}).click();
   assert.deepEqual(await rows.locator("p").allTextContents(), original);
   await page.reload();
   await rows.first().waitFor();
