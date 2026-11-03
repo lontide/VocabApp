@@ -77,3 +77,7 @@ npm run dev
 - npm run test:browser: Edge 390×844에서 목록·개별 공개·평가 전환·모드 독립성·새로고침 저장·순서 안정/복원·카드 왕복·가로 넘침·퀴즈/단축키 안내 제거 확인.
 - 재실행: npm ci 후 TEST_URL을 테스트할 주소로 설정하고 npm run test:browser 실행. 기본 주소는 http://localhost:5173, 기본 브라우저는 설치된 Edge이며 BROWSER_CHANNEL로 변경 가능하다.
 - 실제 휴대폰·스크린리더·설치·음성 검증은 아직 미실행이다. 위 기존 기준선 설명보다 이 결과와 현재 소스를 우선한다.
+
+### 공개 배포 검증
+
+2026-11-04, 구현 커밋 a1b7137: GitHub Actions Validate/Deploy 실행 후 https://lontide.github.io/VocabApp/ 에서 TEST_URL을 설정해 npm run test:browser를 실행했다. Edge 390×844에서 PASS. 목록 50개, 초기/개별 공개, 평가 전환, 모드 독립성, 새로고침 저장, 섞기 안정성과 원본 복원, 카드 왕복, 가로 넘침 없음 및 객관식/단축키 안내 제거를 확인했다. 실제 Android/iOS 기기·TTS/설치·스크린리더 검증을 대체하지 않는다.

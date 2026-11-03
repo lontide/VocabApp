@@ -4,8 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { loadUtility } from './load-utility.mjs';
 
 const data = JSON.parse(await readFile(new URL('../src/data/wordlist.json', import.meta.url), 'utf8'));
-// Transitional adapter: use the current generator until T-10 extracts a shared card/list mapper.
-// No multiple-choice option contract is retained here.
+// Card and list share this production mapper; multiple-choice contracts are removed.
 const quiz = await loadUtility('study');
 
 test('dataset has 2,500 unique items and consistent round references', () => {
