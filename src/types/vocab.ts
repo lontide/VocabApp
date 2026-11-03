@@ -29,21 +29,4 @@ export type QuizMode =
   | 'sentence_to_meaning' // 예제 문장을 보여주고 뜻 맞히기
   | 'korean_to_sentence'; // 한국어 문장을 보여주고 예제 영어 문장 맞히기
 
-export type StudyStyle = 'flashcard' | 'quiz';
-
-export interface QuizOption {
-  id: number;
-  text: string;
-  isCorrect: boolean;
-  item: WordItem;
-}
-
-export interface QuizQuestion {
-  item: WordItem;
-  questionText: string;
-  promptType: string;
-  answerType: string;
-  correctAnswerText: string;
-  options: QuizOption[];
-  ttsText?: string;
-}
+export type StudyStyle = 'flashcard' | 'list';

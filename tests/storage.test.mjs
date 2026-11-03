@@ -19,11 +19,11 @@ test('preferences and bookmarks: defaults, round trips, corrupt JSON and denied 
     assert.deepEqual(storage.loadBookmarks(), []);
     storage.saveSelectedRounds([2, 5]);
     storage.saveQuizMode('korean_to_sentence');
-    storage.saveStudyStyle('quiz');
+    storage.saveStudyStyle('flashcard');
     storage.saveBookmarks([10, 20]);
     assert.deepEqual(storage.loadSelectedRounds(), [2, 5]);
     assert.equal(storage.loadQuizMode(), 'korean_to_sentence');
-    assert.equal(storage.loadStudyStyle(), 'quiz');
+    assert.equal(storage.loadStudyStyle(), 'flashcard');
     assert.deepEqual(storage.loadBookmarks(), [10, 20]);
     assert.equal(values.get('vocab_app_bookmarks'), '[10,20]');
     console.error = (...args) => errors.push(args);
@@ -41,7 +41,7 @@ test('preferences and bookmarks: defaults, round trips, corrupt JSON and denied 
     assert.deepEqual(storage.loadBookmarks(), []);
     assert.doesNotThrow(() => {
       storage.saveSelectedRounds([1]); storage.saveQuizMode('meaning_to_word');
-      storage.saveStudyStyle('quiz'); storage.saveBookmarks([1]);
+      storage.saveStudyStyle('flashcard'); storage.saveBookmarks([1]);
     });
     assert.equal(errors.length, 10);
   } finally {

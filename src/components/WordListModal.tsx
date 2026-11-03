@@ -29,7 +29,7 @@ export const WordListModal: React.FC<WordListModalProps> = ({
   const [scope, setScope] = useState<'selected' | 'all' | 'bookmarks'>('selected');
   const [displayLimit, setDisplayLimit] = useState(50);
 
-  if (!isOpen) return null;
+
 
   // Filter items
   const filteredItems = useMemo(() => {
@@ -55,6 +55,8 @@ export const WordListModal: React.FC<WordListModalProps> = ({
 
     return pool;
   }, [allItems, selectedRounds, bookmarks, scope, searchQuery]);
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">

@@ -15,11 +15,7 @@ export const MobileConnectModal: React.FC<MobileConnectModalProps> = ({
   const [copied, setCopied] = useState(false);
 
   // Network address
-  const url = typeof window !== 'undefined' 
-    ? (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-        ? `http://192.168.55.17:5173` 
-        : window.location.origin)
-    : 'http://192.168.55.17:5173';
+  const url = new URL(import.meta.env.BASE_URL, window.location.href).href;
 
   useEffect(() => {
     if (isOpen && url) {
@@ -38,8 +34,8 @@ export const MobileConnectModal: React.FC<MobileConnectModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(url);
+  const handleCopy = async () => {
+    try { await navigator.clipboard.writeText(url); } catch { setCopied(false); return; }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

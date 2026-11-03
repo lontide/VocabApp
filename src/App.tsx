@@ -1,278 +1,197 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import wordlistDataRaw from './data/wordlist.json';
-import { WordlistData, WordItem, QuizMode, StudyStyle } from './types/vocab';
-import { shuffleArray } from './utils/quiz';
-import { 
-  loadSelectedRounds, 
-  saveSelectedRounds, 
-  loadQuizMode, 
-  saveQuizMode, 
-  loadStudyStyle, 
-  saveStudyStyle, 
-  loadBookmarks, 
-  saveBookmarks 
-} from './utils/storage';
-
-import { Header } from './components/Header';
-import { ModeTabs } from './components/ModeTabs';
-import { FlashcardView } from './components/FlashcardView';
-import { QuizView } from './components/QuizView';
-import { ResultView } from './components/ResultView';
-import { RoundSelectorModal } from './components/RoundSelectorModal';
-import { WordListModal } from './components/WordListModal';
-import { MobileConnectModal } from './components/MobileConnectModal';
-import { InstallAppBanner } from './components/InstallAppBanner';
-
-const data = wordlistDataRaw as WordlistData;
-
-export const App: React.FC = () => {
-  // Saved user preferences
-  const [selectedRounds, setSelectedRounds] = useState<number[]>(() => loadSelectedRounds([1]));
-  const [currentMode, setCurrentMode] = useState<QuizMode>(() => loadQuizMode('word_to_meaning'));
-  const [studyStyle, setStudyStyle] = useState<StudyStyle>(() => loadStudyStyle('flashcard'));
-  const [bookmarks, setBookmarks] = useState<number[]>(() => loadBookmarks());
-
-  // Modals
-  const [isRoundModalOpen, setIsRoundModalOpen] = useState(false);
-  const [isWordListModalOpen, setIsWordListModalOpen] = useState(false);
-  const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
-
-  // Deck & Learning State
-  const [deck, setDeck] = useState<WordItem[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isCompleted, setIsCompleted] = useState(false);
-  
-  // Progress & Scores
-  const [score, setScore] = useState(0);
-  const [streak, setStreak] = useState(0);
-  const [wrongItemIds, setWrongItemIds] = useState<number[]>([]);
-
-  // Filter all items that belong to the selected rounds
-  const selectedPool = useMemo(() => {
-    return data.items.filter(item => selectedRounds.includes(item.round));
-  }, [selectedRounds]);
-
-  // Initialize or re-shuffle deck when selected rounds change
-  const initializeDeck = useCallback((pool: WordItem[]) => {
-    if (pool.length === 0) return;
-    const shuffled = shuffleArray(pool);
-    setDeck(shuffled);
-    setCurrentIndex(0);
-    setIsCompleted(false);
-    setScore(0);
-    setStreak(0);
-    setWrongItemIds([]);
-  }, []);
-
-  // When selectedRounds changes, update deck
-  useEffect(() => {
-    saveSelectedRounds(selectedRounds);
-    initializeDeck(selectedPool);
-  }, [selectedRounds, initializeDeck, selectedPool]);
-
-  // Mode change handler
-  const handleSelectMode = (newMode: QuizMode) => {
-    setCurrentMode(newMode);
-    saveQuizMode(newMode);
-  };
-
-  // Study style change handler
-  const handleSelectStudyStyle = (newStyle: StudyStyle) => {
-    setStudyStyle(newStyle);
-    saveStudyStyle(newStyle);
-  };
-
-  // Shuffle button handler
-  const handleShuffle = () => {
-    initializeDeck(selectedPool);
-  };
-
-  // Round selection apply handler
-  const handleApplyRounds = (newRounds: number[]) => {
-    setSelectedRounds(newRounds);
-  };
-
-  // Toggle bookmark handler
-  const handleToggleBookmark = (id: number) => {
-    setBookmarks(prev => {
-      const next = prev.includes(id) ? prev.filter(b => b !== id) : [...prev, id];
-      saveBookmarks(next);
+import { useState, useMemo } from "react";
+import raw from "./data/wordlist.json";
+import { WordlistData, WordItem, StudyStyle } from "./types/vocab";
+import * as storage from "./utils/storage";
+import {
+  orderedItems,
+  evaluate,
+  statusKey,
+  summary,
+  Order,
+} from "./utils/study";
+import { Header } from "./components/Header";
+import { ModeTabs } from "./components/ModeTabs";
+import { StudyItem } from "./components/StudyItem";
+import { RoundSelectorModal } from "./components/RoundSelectorModal";
+import { WordListModal } from "./components/WordListModal";
+import { MobileConnectModal } from "./components/MobileConnectModal";
+import { InstallAppBanner } from "./components/InstallAppBanner";
+import { ResultView } from "./components/ResultView";
+const data = raw as WordlistData;
+export default function App() {
+  const [rounds, setRounds] = useState(() => storage.loadSelectedRounds());
+  const [mode, setMode] = useState(() => storage.loadQuizMode());
+  const [style, setStyle] = useState(() => storage.loadStudyStyle());
+  const [order, setOrder] = useState<Order>(() => storage.loadOrder());
+  const [records, setRecords] = useState(() => storage.loadRecords());
+  const [bookmarks, setBookmarks] = useState(() => storage.loadBookmarks());
+  const [modal, setModal] = useState("");
+  const [index, setIndex] = useState(0);
+  const [done, setDone] = useState(false);
+  const [retry, setRetry] = useState<WordItem[] | null>(null);
+  const [generation, setGeneration] = useState(0);
+  const pool = useMemo(
+    () => orderedItems(data.items, rounds, order),
+    [rounds, order],
+  );
+  const deck = retry || pool;
+  const stats = summary(deck, mode, records);
+  const item = deck[index];
+  function bookmark(id: number) {
+    const next = bookmarks.includes(id)
+      ? bookmarks.filter((i) => i !== id)
+      : [...bookmarks, id];
+    setBookmarks(next);
+    storage.saveBookmarks(next);
+  }
+  function mark(id: number, status: "mastered" | "confused") {
+    setRecords((prev) => {
+      const next = evaluate(prev, id, mode, status);
+      storage.saveRecords(next);
       return next;
     });
-  };
-
-  // Flashcard Next handler
-  const handleFlashcardNext = (isMastered: boolean) => {
-    const currentItem = deck[currentIndex];
-    if (currentItem) {
-      if (isMastered) {
-        setScore(prev => prev + 1);
-        setWrongItemIds(prev => prev.filter(id => id !== currentItem.id));
-      } else {
-        setWrongItemIds(prev => Array.from(new Set([...prev, currentItem.id])));
-      }
-    }
-
-    if (currentIndex + 1 < deck.length) {
-      setCurrentIndex(prev => prev + 1);
-    } else {
-      setIsCompleted(true);
-    }
-  };
-
-  // Flashcard Prev handler
-  const handleFlashcardPrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
-    }
-  };
-
-  // Quiz answer submitted handler
-  const handleQuizAnswerSubmitted = (isCorrect: boolean) => {
-    const currentItem = deck[currentIndex];
-    if (isCorrect) {
-      setScore(prev => prev + 1);
-      setStreak(prev => prev + 1);
-    } else {
-      setStreak(0);
-      if (currentItem) {
-        setWrongItemIds(prev => Array.from(new Set([...prev, currentItem.id])));
-      }
-    }
-  };
-
-  // Quiz next question handler
-  const handleQuizNextQuestion = () => {
-    if (currentIndex + 1 < deck.length) {
-      setCurrentIndex(prev => prev + 1);
-    } else {
-      setIsCompleted(true);
-    }
-  };
-
-  // Retry all items
-  const handleRetryAll = () => {
-    initializeDeck(selectedPool);
-  };
-
-  // Retry wrong items only
-  const handleRetryWrongOnly = () => {
-    const wrongItems = data.items.filter(i => wrongItemIds.includes(i.id));
-    if (wrongItems.length > 0) {
-      initializeDeck(wrongItems);
-    }
-  };
-
-  const currentItem = deck[currentIndex];
-  const wrongItemsList = useMemo(() => {
-    return data.items.filter(i => wrongItemIds.includes(i.id));
-  }, [wrongItemIds]);
-
+  }
+  function view(next: StudyStyle) {
+    setStyle(next);
+    storage.saveStudyStyle(next);
+    setGeneration((g) => g + 1);
+  }
+  function restart(items: WordItem[] | null) {
+    setRetry(items);
+    setIndex(0);
+    setDone(false);
+    setGeneration((g) => g + 1);
+  }
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col selection:bg-indigo-500 selection:text-white pb-12">
-      {/* Top Header */}
+    <div className="min-h-screen bg-slate-900 text-slate-100 pb-36">
       <Header
-        selectedRounds={selectedRounds}
+        selectedRounds={rounds}
         roundsInfo={data.rounds}
-        totalDeckCount={selectedPool.length}
-        onOpenRoundSelector={() => setIsRoundModalOpen(true)}
-        onOpenWordList={() => setIsWordListModalOpen(true)}
-        onOpenMobileConnect={() => setIsMobileModalOpen(true)}
-        onShuffle={handleShuffle}
+        totalDeckCount={pool.length}
+        onOpenRoundSelector={() => setModal("rounds")}
+        onOpenWordList={() => setModal("search")}
+        onOpenMobileConnect={() => setModal("mobile")}
         bookmarkCount={bookmarks.length}
       />
-
-      {/* Mode & Style Selection Tabs */}
       <ModeTabs
-        currentMode={currentMode}
-        onSelectMode={handleSelectMode}
-        studyStyle={studyStyle}
-        onSelectStudyStyle={handleSelectStudyStyle}
+        currentMode={mode}
+        onSelectMode={(m) => {
+          setMode(m);
+          storage.saveQuizMode(m);
+          setGeneration((g) => g + 1);
+        }}
+        studyStyle={style}
+        onSelectStudyStyle={view}
       />
-
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col justify-center py-4">
-        {deck.length === 0 ? (
-          <div className="text-center py-16 px-4">
-            <p className="text-slate-400">선택된 탄에 단어가 없습니다.</p>
-            <button
-              onClick={() => setIsRoundModalOpen(true)}
-              className="mt-3 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold"
-            >
-              탄 선택하기
-            </button>
-          </div>
-        ) : isCompleted ? (
+      <div className="max-w-4xl mx-auto p-3">
+        <label className="flex items-center gap-3">
+          학습 순서{" "}
+          <select
+            aria-label="학습 순서"
+            className="bg-slate-800 rounded-xl p-3"
+            value={order}
+            onChange={(e) => {
+              const next = e.target.value as Order;
+              setOrder(next);
+              storage.saveOrder(next);
+              restart(null);
+            }}
+          >
+            <option value="original">원본 순서</option>
+            <option value="shuffle">섞기</option>
+          </select>
+        </label>
+      </div>
+      <main className="max-w-4xl mx-auto p-3 space-y-3">
+        {style === "list" ? (
+          <section aria-label="어휘 리스트" className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h1 className="font-bold">
+                선택한 총정리 {rounds.join(", ")}탄 · {pool.length}개
+              </h1>
+              <button
+                className="p-3 bg-indigo-600 rounded-xl"
+                onClick={() => view("flashcard")}
+              >
+                카드로 돌아가기
+              </button>
+            </div>
+            {pool.map((i) => (
+              <StudyItem
+                key={generation + ":" + i.id + ":" + mode}
+                item={i}
+                mode={mode}
+                status={records[statusKey(i.id, mode)]}
+                onEvaluate={(s) => mark(i.id, s)}
+                bookmarked={bookmarks.includes(i.id)}
+                onBookmark={() => bookmark(i.id)}
+              />
+            ))}
+          </section>
+        ) : done ? (
           <ResultView
             totalCount={deck.length}
-            correctCount={score}
-            wrongItems={wrongItemsList}
-            onRetryAll={handleRetryAll}
-            onRetryWrongOnly={handleRetryWrongOnly}
-            onOpenRoundSelector={() => setIsRoundModalOpen(true)}
+            correctCount={stats.mastered}
+            wrongItems={stats.wrong}
+            onRetryAll={() => restart(null)}
+            onRetryWrongOnly={() => restart(stats.wrong)}
+            onOpenRoundSelector={() => setModal("rounds")}
           />
-        ) : currentItem ? (
-          studyStyle === 'flashcard' ? (
-            <FlashcardView
-              key={`flashcard-${currentItem.id}-${currentMode}`}
-              item={currentItem}
-              currentIndex={currentIndex}
-              totalCount={deck.length}
-              mode={currentMode}
-              isBookmarked={bookmarks.includes(currentItem.id)}
-              onToggleBookmark={handleToggleBookmark}
-              onNext={handleFlashcardNext}
-              onPrev={handleFlashcardPrev}
-              canPrev={currentIndex > 0}
+        ) : item ? (
+          <>
+            <p>
+              {index + 1} / {deck.length} · 외웠어요 {stats.mastered}개
+            </p>
+            <StudyItem
+              key={generation + ":" + item.id + ":" + mode}
+              item={item}
+              mode={mode}
+              status={records[statusKey(item.id, mode)]}
+              onEvaluate={(s) => {
+                mark(item.id, s);
+                if (index + 1 < deck.length) setIndex((i) => i + 1);
+                else setDone(true);
+              }}
+              bookmarked={bookmarks.includes(item.id)}
+              onBookmark={() => bookmark(item.id)}
             />
-          ) : (
-            <QuizView
-              key={`quiz-${currentItem.id}-${currentMode}`}
-              item={currentItem}
-              pool={selectedPool.length >= 4 ? selectedPool : data.items}
-              currentIndex={currentIndex}
-              totalCount={deck.length}
-              mode={currentMode}
-              streak={streak}
-              score={score}
-              isBookmarked={bookmarks.includes(currentItem.id)}
-              onToggleBookmark={handleToggleBookmark}
-              onAnswerSubmitted={handleQuizAnswerSubmitted}
-              onNextQuestion={handleQuizNextQuestion}
-            />
-          )
-        ) : null}
+            <button
+              className="p-3 rounded-xl bg-slate-800 disabled:opacity-30"
+              disabled={index === 0}
+              onClick={() => setIndex((i) => i - 1)}
+            >
+              이전 카드
+            </button>
+          </>
+        ) : (
+          <p>선택된 탄에 단어가 없습니다.</p>
+        )}
       </main>
-
-      {/* Round Selector Modal */}
       <RoundSelectorModal
-        isOpen={isRoundModalOpen}
-        onClose={() => setIsRoundModalOpen(false)}
+        key={modal === "rounds" ? "open" : "closed"}
+        isOpen={modal === "rounds"}
+        onClose={() => setModal("")}
         roundsInfo={data.rounds}
-        selectedRounds={selectedRounds}
-        onApplyRounds={handleApplyRounds}
+        selectedRounds={rounds}
+        onApplyRounds={(next) => {
+          setRounds(next);
+          storage.saveSelectedRounds(next);
+          restart(null);
+        }}
       />
-
-      {/* Word List & Search Modal */}
       <WordListModal
-        isOpen={isWordListModalOpen}
-        onClose={() => setIsWordListModalOpen(false)}
+        isOpen={modal === "search"}
+        onClose={() => setModal("")}
         allItems={data.items}
-        selectedRounds={selectedRounds}
+        selectedRounds={rounds}
         bookmarks={bookmarks}
-        onToggleBookmark={handleToggleBookmark}
+        onToggleBookmark={bookmark}
       />
-
-      {/* Mobile QR Connect Modal */}
       <MobileConnectModal
-        isOpen={isMobileModalOpen}
-        onClose={() => setIsMobileModalOpen(false)}
+        isOpen={modal === "mobile"}
+        onClose={() => setModal("")}
       />
-
-      {/* PWA Chrome App Install Banner */}
       <InstallAppBanner />
     </div>
   );
-};
-
-export default App;
+}

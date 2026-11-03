@@ -1,6 +1,6 @@
-import React from 'react';
-import { Layers, Search, RotateCcw, Smartphone } from 'lucide-react';
-import { RoundInfo } from '../types/vocab';
+import React from "react";
+import { Layers, Search, Smartphone } from "lucide-react";
+import { RoundInfo } from "../types/vocab";
 
 interface HeaderProps {
   selectedRounds: number[];
@@ -9,7 +9,7 @@ interface HeaderProps {
   onOpenRoundSelector: () => void;
   onOpenWordList: () => void;
   onOpenMobileConnect: () => void;
-  onShuffle: () => void;
+
   bookmarkCount: number;
 }
 
@@ -20,12 +20,13 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenRoundSelector,
   onOpenWordList,
   onOpenMobileConnect,
-  onShuffle,
-  bookmarkCount
+
+  bookmarkCount,
 }) => {
   const getSelectedRoundsSummary = () => {
-    if (selectedRounds.length === 0) return '탄을 선택해주세요';
-    if (selectedRounds.length === roundsInfo.length) return '전체 50개 탄 선택됨';
+    if (selectedRounds.length === 0) return "탄을 선택해주세요";
+    if (selectedRounds.length === roundsInfo.length)
+      return "전체 50개 탄 선택됨";
     if (selectedRounds.length === 1) return `총정리 ${selectedRounds[0]}탄`;
     return `총정리 ${selectedRounds[0]}탄 외 ${selectedRounds.length - 1}개`;
   };
@@ -68,15 +69,6 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="text-[11px] font-bold text-indigo-400 bg-indigo-950/80 px-1.5 py-0.2 rounded-full border border-indigo-800/50">
               {totalDeckCount}개
             </span>
-          </button>
-
-          {/* Shuffle Button */}
-          <button
-            onClick={onShuffle}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition active:scale-95"
-            title="단어 순서 다시 섞기 (Shuffle)"
-          >
-            <RotateCcw className="w-4 h-4" />
           </button>
 
           {/* Word List / Search Button */}
