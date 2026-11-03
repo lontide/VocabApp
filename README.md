@@ -35,3 +35,8 @@ git push -u origin main
 3. 잠시 후 상단에 배포 완료 URL (`https://<아이디>.github.io/<저장소_이름>/`)이 생성됩니다!
 
 스마트폰 브라우저에서 해당 주소로 접속한 후, **"홈 화면에 추가"** 또는 **"앱 설치"**를 누르면 안드로이드 폰에서 독립 앱으로 언제 어디서든 이용하실 수 있습니다.
+
+## 개발 및 검증 Harness
+
+Node.js 24에서 `npm ci` 후 `npm run check`로 자동 테스트와 프로덕션 빌드를 실행합니다.
+작업 지침은 [AGENTS.md](AGENTS.md), 구현 현황과 수동 점검은 [docs/HARNESS.md](docs/HARNESS.md)를 참고하세요.
