@@ -15,6 +15,7 @@ import { OrderControl } from "./components/OrderControl";
 import { Header } from "./components/Header";
 import { ModeTabs } from "./components/ModeTabs";
 import { StudyItem } from "./components/StudyItem";
+import { CardJump } from "./components/CardJump";
 import { RoundSelectorModal } from "./components/RoundSelectorModal";
 import { WordListModal } from "./components/WordListModal";
 import { MobileConnectModal } from "./components/MobileConnectModal";
@@ -223,9 +224,16 @@ export default function App() {
           />
         ) : item ? (
           <>
-            <p>
-              {index + 1} / {deck.length} · 외웠어요 {stats.mastered}개
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p aria-live="polite">
+                {index + 1} / {deck.length} · 외웠어요 {stats.mastered}개
+              </p>
+              <CardJump
+                current={index + 1}
+                total={deck.length}
+                onJump={setIndex}
+              />
+            </div>
             <StudyItem
               key={generation + ":" + item.id + ":" + mode}
               item={item}

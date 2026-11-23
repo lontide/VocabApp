@@ -97,3 +97,11 @@ UI-06: node tests/order-browser.mjs가 Edge 320/390/1280px에서 통과했다. �
 - `TEST_URL=http://127.0.0.1:5174 node tests/navigation-browser.mjs`: 320/390/1280px 통과. 모바일 폭은 터치·모바일 에뮬레이션 사용. 공개 전·후 평가 없는 이동, 이전 카드 왕복과 재가림, 기록 보존과 미평가 유지, 평가 자동 이동, Tab/Enter, 마지막 결과 보기, 가로 넘침 및 pageerror 없음을 확인했다. 390px 스크린샷 시각 검토 완료.
 - 같은 TEST_URL과 `BROWSER_CHANNEL=chromium`으로 `node tests/browser.mjs`, `node tests/ui-browser.mjs`, `node tests/order-browser.mjs` 모두 통과. 기존 목록·저장·모드 독립성·모바일 UI·순서 선택 회귀 검증.
 - 브라우저 실행 파일은 기존 설치된 Chromium을 사용했다. 실제 Android/iOS 기기·스크린리더·TTS·설치 및 공개 배포 검증은 이번에 수행하지 않았다.
+
+## UI-08 카드 번호로 이동
+
+320/390/1280px에서 진행 표시 옆 풀다운의 첫·중간·마지막 번호 선택 즉시 이동, 공개 후 이동 시 가림, 같은 번호 선택 시 공개 유지, 선택지 범위, 기본 키보드 조작, 평가·북마크 보존, 섞인 덱 및 헷갈린 단어 덱 기준 번호, 가로 넘침을 검증한다.
+
+2026-11-24: 로컬 작업 트리 http://127.0.0.1:5174 에서 `TEST_URL=http://127.0.0.1:5174 node tests/jump-browser.mjs` Chromium 320/390/1280px 모두 통과. 위 번호 이동·유효성·기록/북마크 보존·섞기·1개짜리 재학습 덱·Enter 제출을 확인했다. 390px 스크린샷 시각 검토 완료. `tests/navigation-browser.mjs` 기존 카드 이동 회귀 검증과 npm run check도 통과. 실제 Android/iOS 기기·스크린리더·공개 배포 검증은 미실행.
+
+풀다운 변경 검증: 같은 로컬 주소에서 수정한 jump-browser.mjs와 navigation-browser.mjs를 Chromium 320/390/1280px로 재실행해 모두 통과했다. 번호 선택 즉시 이동, 현재 번호 동기화, 범위에 맞는 선택지, Home/Enter 키보드 조작과 기존 기록 보존을 확인했다. 390px에서 진행 표시 옆 작은 풀다운 배치와 큰 입력 박스 제거를 스크린샷으로 확인했다. npm run check도 통과했다. 실제 휴대폰 기본 선택 UI는 미검증이다.
