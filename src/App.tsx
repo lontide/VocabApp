@@ -189,6 +189,7 @@ export default function App() {
                   맨 위로
                 </button>
               </div>
+              <p className="text-xs text-slate-400">? 헷갈려요 · ✓ 외웠어요 · ☆ 북마크</p>
             </div>
             {visible.length === 0 && (
               <div className="text-center p-6 space-y-3">
@@ -201,17 +202,20 @@ export default function App() {
                 </button>
               </div>
             )}
-            {visible.map((i) => (
-              <StudyItem
-                key={generation + ":" + i.id + ":" + mode}
-                item={i}
-                mode={mode}
-                status={records[statusKey(i.id, mode)]}
-                onEvaluate={(s) => mark(i.id, s)}
-                bookmarked={bookmarks.includes(i.id)}
-                onBookmark={() => bookmark(i.id)}
-              />
-            ))}
+            <div className="rounded-xl bg-slate-800/60 overflow-hidden">
+              {visible.map((i) => (
+                <StudyItem
+                  compact
+                  key={generation + ":" + i.id + ":" + mode}
+                  item={i}
+                  mode={mode}
+                  status={records[statusKey(i.id, mode)]}
+                  onEvaluate={(s) => mark(i.id, s)}
+                  bookmarked={bookmarks.includes(i.id)}
+                  onBookmark={() => bookmark(i.id)}
+                />
+              ))}
+            </div>
           </section>
         ) : done ? (
           <ResultView

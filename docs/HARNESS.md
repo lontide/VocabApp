@@ -105,3 +105,15 @@ UI-06: node tests/order-browser.mjs가 Edge 320/390/1280px에서 통과했다. �
 2026-11-24: 로컬 작업 트리 http://127.0.0.1:5174 에서 `TEST_URL=http://127.0.0.1:5174 node tests/jump-browser.mjs` Chromium 320/390/1280px 모두 통과. 위 번호 이동·유효성·기록/북마크 보존·섞기·1개짜리 재학습 덱·Enter 제출을 확인했다. 390px 스크린샷 시각 검토 완료. `tests/navigation-browser.mjs` 기존 카드 이동 회귀 검증과 npm run check도 통과. 실제 Android/iOS 기기·스크린리더·공개 배포 검증은 미실행.
 
 풀다운 변경 검증: 같은 로컬 주소에서 수정한 jump-browser.mjs와 navigation-browser.mjs를 Chromium 320/390/1280px로 재실행해 모두 통과했다. 번호 선택 즉시 이동, 현재 번호 동기화, 범위에 맞는 선택지, Home/Enter 키보드 조작과 기존 기록 보존을 확인했다. 390px에서 진행 표시 옆 작은 풀다운 배치와 큰 입력 박스 제거를 스크린샷으로 확인했다. npm run check도 통과했다. 실제 휴대폰 기본 선택 UI는 미검증이다.
+
+## UI-09 얇은 어휘 리스트
+
+320/390/1280px에서 짧은 행 높이 축소, 44px 기호 평가 버튼, 선택 상태와 접근성 이름, 평가 시 답안/행 높이 유지, 개별 답안 가림·북마크·발음 조작 노출, 4개 모드 긴 문장 줄바꿈과 가로 넘침, 기존 검색/필터·저장 회귀를 확인한다. `tests/compact-list-browser.mjs`와 기존 browser.mjs/ui-browser.mjs를 사용한다.
+
+2026-11-24: 로컬 작업 트리 http://127.0.0.1:5174 에서 BROWSER_CHANNEL=chromium, TEST_URL을 설정해 compact-list-browser.mjs, browser.mjs, ui-browser.mjs 모두 통과. 320/390/1280px에서 짧은 항목 105px(카드 248px 대비), 44px 기호 버튼, 상태 전환·북마크·개별 가림·발음 버튼 노출·4개 모드 줄바꿈·가로 넘침 없음 및 기존 검색/필터/저장 회귀를 확인했다. 390px 스크린샷 시각 검토와 npm run check 완료. 실제 Android/iOS·스크린리더·실제 음성 재생·공개 배포 검증은 미실행.
+
+UI-09 글자 확대: 질문 14→16px, 답안 12→14px, 탄/번호 10→12px 및 답안 대비 보강 후 npm run check와 같은 주소의 compact-list-browser.mjs(Chromium 320/390/1280px) 재검증 통과. 짧은 행 높이는 105px 유지, 390px 스크린샷 시각 검토 완료. 실제 휴대폰은 미검증.
+
+UI-09 여백·버튼 정렬 보정: compact-list-browser.mjs에 좌측 16px 여백, 평가/북마크 버튼 동일 Y좌표와 그룹 간 간격 검증을 추가했다. Chromium 320/390/1280px에서 통과했고 390px 화면을 시각 검토했다. 짧은 행은 117px, 기본 카드 248px 대비 축소를 유지한다. 실제 휴대폰은 미검증.
+
+여백·정렬 보정 후 npm run check와 browser.mjs/ui-browser.mjs 회귀 테스트도 모두 통과했다.
