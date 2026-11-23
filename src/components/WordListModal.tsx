@@ -129,7 +129,7 @@ export const WordListModal: React.FC<WordListModalProps> = ({
                     : 'bg-slate-800 text-slate-300 hover:bg-slate-750'
                 }`}
               >
-                전체 50탄 (2,500개)
+                전체 {new Set(allItems.map(i => i.round)).size}탄 ({allItems.length.toLocaleString()}개)
               </button>
               <button
                 onClick={() => { setScope('bookmarks'); setDisplayLimit(50); }}

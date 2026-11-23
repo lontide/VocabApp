@@ -95,7 +95,7 @@ test("TC-09/TC-10/TC-14: versioned persistence, corrupt schemas, denied storage 
         entries: {
           ...records,
           "0:word_to_meaning": "mastered",
-          "2501:word_to_meaning": "mastered",
+          "999999:word_to_meaning": "mastered",
           "2:invalid": "mastered",
           "3:meaning_to_word": "invalid",
         },
@@ -104,7 +104,7 @@ test("TC-09/TC-10/TC-14: versioned persistence, corrupt schemas, denied storage 
     assert.deepEqual(storage.loadRecords(), records);
     values.set("vocab_app_bookmarks", "null");
     assert.deepEqual(storage.loadBookmarks(), []);
-    values.set("vocab_app_selected_rounds", '[0,1,1,51,"2"]');
+    values.set("vocab_app_selected_rounds", '[0,1,1,53,"2"]');
     assert.deepEqual(storage.loadSelectedRounds(), [1]);
     Object.defineProperty(globalThis, "localStorage", {
       configurable: true,

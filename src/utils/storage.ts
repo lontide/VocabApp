@@ -1,3 +1,7 @@
+import dataset from "../data/wordlist.json";
+const roundIds = new Set(dataset.rounds.map(r => r.round));
+// Retired IDs remain valid in storage so old records are never erased or reassigned.
+const maxItemId = Math.max(...dataset.items.map(i => i.id));
 import { QuizMode, StudyStyle } from "../types/vocab";
 
 const STORAGE_KEYS = {
@@ -18,7 +22,7 @@ export function loadSelectedRounds(defaultRounds: number[] = [1]): number[] {
           ...new Set(
             parsed.filter(
               (n: unknown) =>
-                Number.isInteger(n) && Number(n) >= 1 && Number(n) <= 50,
+                Number.isInteger(n) && roundIds.has(Number(n)),
             ),
           ),
         ] as number[];
@@ -101,7 +105,7 @@ export function loadBookmarks(): number[] {
             ...new Set(
               parsed.filter(
                 (n: unknown) =>
-                  Number.isInteger(n) && Number(n) >= 1 && Number(n) <= 2500,
+                  Number.isInteger(n) && Number(n) >= 1 && Number(n) <= maxItemId,
               ),
             ),
           ] as number[])
@@ -155,7 +159,7 @@ export function loadRecords(): Record<string, "mastered" | "confused"> {
           /^(?:[1-9][0-9]*):(word_to_meaning|meaning_to_word|sentence_to_meaning|korean_to_sentence)$/.test(
             key,
           ) &&
-          Number(key.split(":")[0]) <= 2500 &&
+          Number(key.split(":")[0]) <= maxItemId &&
           ["mastered", "confused"].includes(String(value)),
       ),
     ) as Record<string, "mastered" | "confused">;

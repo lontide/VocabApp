@@ -7,12 +7,12 @@ const data = JSON.parse(await readFile(new URL('../src/data/wordlist.json', impo
 // Card and list share this production mapper; multiple-choice contracts are removed.
 const quiz = await loadUtility('study');
 
-test('dataset has 2,500 unique items and consistent round references', () => {
-  assert.equal(data.totalCount, 2500);
+test('dataset has 2,588 unique items and consistent round references', () => {
+  assert.equal(data.totalCount, 2588);
   assert.equal(data.items.length, data.totalCount);
-  assert.equal(data.rounds.length, 50);
+  assert.equal(data.rounds.length, 52);
   assert.equal(new Set(data.items.map(i => i.id)).size, data.items.length);
-  assert.deepEqual(data.rounds.map(r => r.round), Array.from({ length: 50 }, (_, i) => i + 1));
+  assert.deepEqual(data.rounds.map(r => r.round), Array.from({ length: 52 }, (_, i) => i + 1));
   for (const item of data.items) {
     assert.ok(Number.isInteger(item.id));
     assert.ok(data.rounds.some(r => r.round === item.round));

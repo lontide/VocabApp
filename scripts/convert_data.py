@@ -12,6 +12,10 @@ sheets = [s for s in wb.sheetnames if s.startswith('총정리_')]
 # Sort sheets by number
 sheets.sort(key=lambda x: int(x.replace('총정리_', '').replace('탄', '')))
 
+registry_path = os.path.join(os.path.dirname(__file__), 'word_ids.json')
+with open(registry_path, encoding='utf-8') as f:
+    identities = json.load(f)
+next_id = max(identities.values()) + 1
 all_items = []
 rounds_info = []
 
@@ -32,8 +36,17 @@ for s in sheets:
         ex_ko = str(r[5] or '').strip()
         link = str(r[6] or '').strip() if len(r) > 6 and r[6] else ''
         
+        # A missing-caption marker is not a learnable expression.
+        if word == '(자막 누락)' and not ex_en and not ex_ko:
+            continue
+        if not all((word, meaning, ex_en, ex_ko)):
+            raise ValueError(f'{s}: incomplete learning text at source number {no}')
+        identity = json.dumps([round_num, word, meaning, ex_en, ex_ko], ensure_ascii=False, separators=(',', ':'))
+        if identity not in identities:
+            identities[identity] = next_id
+            next_id += 1
         item = {
-            'id': int(no) if isinstance(no, (int, float)) else len(all_items) + 1,
+            'id': identities[identity],
             'round': round_num,
             'category': cat,
             'word': word,
@@ -59,6 +72,12 @@ data = {
     'rounds': rounds_info,
     'items': all_items
 }
+
+if len({i['id'] for i in all_items}) != len(all_items):
+    raise ValueError('Duplicate learning identities')
+with open(registry_path, 'w', encoding='utf-8') as f:
+    json.dump(identities, f, ensure_ascii=False, indent=2)
+    f.write('\n')
 
 with open(output_json_path, 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=2)

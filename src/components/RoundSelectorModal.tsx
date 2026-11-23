@@ -48,7 +48,7 @@ export const RoundSelectorModal: React.FC<RoundSelectorModalProps> = ({
     onClose();
   };
 
-  const totalExpressions = tempSelected.length * 50;
+  const totalExpressions = roundsInfo.filter(r => tempSelected.includes(r.round)).reduce((sum, r) => sum + r.count, 0);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
@@ -66,7 +66,7 @@ export const RoundSelectorModal: React.FC<RoundSelectorModalProps> = ({
               </span>
             </h2>
             <p className="text-xs text-slate-400 mt-1">
-              학습할 총정리 회차를 선택하세요. (총 1탄 ~ 50탄)
+              학습할 총정리 회차를 선택하세요. (총 1탄 ~ {roundsInfo[roundsInfo.length - 1]?.round}탄)
             </p>
           </div>
           <button
@@ -86,7 +86,7 @@ export const RoundSelectorModal: React.FC<RoundSelectorModalProps> = ({
             onClick={selectAll}
             className="px-2.5 py-1 rounded-lg bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 font-medium border border-indigo-500/30 transition active:scale-95"
           >
-            전체 1~50탄
+            전체 1~{roundsInfo[roundsInfo.length - 1]?.round}탄
           </button>
           <button
             onClick={() => selectRange(1, 10)}
@@ -113,10 +113,10 @@ export const RoundSelectorModal: React.FC<RoundSelectorModalProps> = ({
             31~40탄
           </button>
           <button
-            onClick={() => selectRange(41, 50)}
+            onClick={() => selectRange(41, roundsInfo[roundsInfo.length - 1].round)}
             className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition active:scale-95"
           >
-            41~50탄
+            41~{roundsInfo[roundsInfo.length - 1]?.round}탄
           </button>
         </div>
 
@@ -152,7 +152,7 @@ export const RoundSelectorModal: React.FC<RoundSelectorModalProps> = ({
                 </div>
 
                 <div className="text-[10px] text-slate-400 truncate w-full" title={info.categories.join(', ')}>
-                  {previewCats || '실전 표현 50개'}
+                  {previewCats || `실전 표현 ${info.count}개`}
                 </div>
               </button>
             );

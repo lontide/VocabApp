@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   const getSelectedRoundsSummary = () => {
     if (selectedRounds.length === 0) return "탄을 선택해주세요";
     if (selectedRounds.length === roundsInfo.length)
-      return "전체 50개 탄 선택됨";
+      return `전체 ${roundsInfo.length}개 탄 선택됨`;
     if (selectedRounds.length === 1) return `총정리 ${selectedRounds[0]}탄`;
     return `총정리 ${selectedRounds[0]}탄 외 ${selectedRounds.length - 1}개`;
   };
@@ -45,11 +45,11 @@ export const Header: React.FC<HeaderProps> = ({
                 실전 영어 단어장
               </h1>
               <span className="hidden sm:inline-block text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-                2500 Expressions
+                {roundsInfo.reduce((sum, r) => sum + r.count, 0)} Expressions
               </span>
             </div>
             <p className="text-[11px] text-slate-400 mt-0.5 hidden sm:block">
-              구슬쌤 영상 핵심 총정리 1~50탄
+              구슬쌤 영상 핵심 총정리 1~{roundsInfo[roundsInfo.length - 1]?.round}탄
             </p>
           </div>
         </div>

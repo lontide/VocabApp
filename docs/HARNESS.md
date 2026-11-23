@@ -117,3 +117,11 @@ UI-09 글자 확대: 질문 14→16px, 답안 12→14px, 탄/번호 10→12px �
 UI-09 여백·버튼 정렬 보정: compact-list-browser.mjs에 좌측 16px 여백, 평가/북마크 버튼 동일 Y좌표와 그룹 간 간격 검증을 추가했다. Chromium 320/390/1280px에서 통과했고 390px 화면을 시각 검토했다. 짧은 행은 117px, 기본 카드 248px 대비 축소를 유지한다. 실제 휴대폰은 미검증.
 
 여백·정렬 보정 후 npm run check와 browser.mjs/ui-browser.mjs 회귀 테스트도 모두 통과했다.
+
+## DATA-01 최신 엑셀 반영
+
+`npm run convert-data` 후 JSON diff를 검토하고 `npm run check`를 실행한다. `TEST_URL=검증주소 node tests/data-browser.mjs`는 Chromium 320/390/1280px에서 전체 52탄·2,588개 표시, 52탄의 원본 표현·암기 기록 재접속 보존·가로 넘침을 확인한다.
+
+2026-11-24: npm run check 및 로컬 Chromium 390px tests/browser.mjs 통과. 실제 휴대폰 검증은 미실행.
+
+DATA-01 로컬 tests/data-browser.mjs Chromium 320/390/1280px 통과: 전체 개수, 신규 52탄, 평가 후 새로고침 보존, 가로 넘침 없음 확인.
