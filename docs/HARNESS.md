@@ -125,3 +125,5 @@ UI-09 여백·버튼 정렬 보정: compact-list-browser.mjs에 좌측 16px 여�
 2026-11-24: npm run check 및 로컬 Chromium 390px tests/browser.mjs 통과. 실제 휴대폰 검증은 미실행.
 
 DATA-01 로컬 tests/data-browser.mjs Chromium 320/390/1280px 통과: 전체 개수, 신규 52탄, 평가 후 새로고침 보존, 가로 넘침 없음 확인.
+
+DATA-01 공개 검증: 커밋 65a6d71의 Validate/Deploy Actions 모두 성공. https://lontide.github.io/VocabApp/ 에서 tests/data-browser.mjs Chromium 320/390/1280px 통과. HTML의 index-B9QGckP5.js가 로컬 검증 빌드와 일치함을 확인했다. 실제 Android/iOS 기기 검증은 미실행.
