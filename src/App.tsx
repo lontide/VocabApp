@@ -76,6 +76,10 @@ export default function App() {
       return next;
     });
   }
+  function nextCard() {
+    if (index + 1 < deck.length) setIndex((i) => i + 1);
+    else setDone(true);
+  }
   function view(next: StudyStyle) {
     resetFilters();
     setStyle(next);
@@ -229,19 +233,26 @@ export default function App() {
               status={records[statusKey(item.id, mode)]}
               onEvaluate={(s) => {
                 mark(item.id, s);
-                if (index + 1 < deck.length) setIndex((i) => i + 1);
-                else setDone(true);
+                nextCard();
               }}
               bookmarked={bookmarks.includes(item.id)}
               onBookmark={() => bookmark(item.id)}
             />
-            <button
-              className="p-3 rounded-xl bg-slate-800 disabled:opacity-30"
-              disabled={index === 0}
-              onClick={() => setIndex((i) => i - 1)}
-            >
-              이전 카드
-            </button>
+            <nav aria-label="카드 이동" className="grid grid-cols-2 gap-2">
+              <button
+                className="min-h-12 p-3 rounded-xl bg-slate-800 disabled:opacity-30"
+                disabled={index === 0}
+                onClick={() => setIndex((i) => i - 1)}
+              >
+                이전 카드
+              </button>
+              <button
+                className="min-h-12 p-3 rounded-xl border border-slate-600 bg-slate-800"
+                onClick={nextCard}
+              >
+                {index + 1 < deck.length ? "다음 카드" : "결과 보기"}
+              </button>
+            </nav>
           </>
         ) : (
           <p>선택된 탄에 단어가 없습니다.</p>

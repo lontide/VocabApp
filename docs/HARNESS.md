@@ -87,3 +87,13 @@ npm run dev
 2026-11-04: npm run check에서 assertion 13개와 빌드 통과(기존 확장 TODO 12개 유지). node tests/ui-browser.mjs가 Edge 320/390/1280px에서 통과했다. 기존 node tests/browser.mjs도 통과. 검색·필터·평가 후 행 유지·새로고침·빈 결과 초기화·답안 재가림·고정 도구막대·맨 위 이동·설치 안내 비고정·가로 넘침을 확인했다. 390px 스크린샷 시각 검토 완료.
 
 UI-06: node tests/order-browser.mjs가 Edge 320/390/1280px에서 통과했다. 버튼 선택·48px 높이·같은 버튼 반복 시 답안 공개 보존·저장·원본 복원·Tab/Enter를 검증했다. 기존 browser.mjs와 ui-browser.mjs도 통과했으며 npm run check는 assertion 13개 통과/기존 TODO 12개 및 빌드 성공. 390px 스크린샷 시각 검토 완료.
+
+## UI-07 평가 없는 카드 이동
+
+검증 절차: 320/390/1280px에서 답안 공개 전·후 다음 카드 이동, 이전 카드 왕복 시 답안 가림, 기존 평가 기록 보존, 미평가 유지, 마지막 카드 결과 보기, Tab/Enter 조작, 가로 넘침을 확인한다. 평가 버튼의 기존 자동 이동도 확인한다.
+
+2026-11-24: npm ci로 잠금 파일 기준 Playwright 설치 완료. npm run check 통과(테스트 5개 파일, TypeScript 및 프로덕션 빌드). 로컬 작업 트리 http://127.0.0.1:5174 에서 Chromium으로 아래 검증을 수행했다.
+
+- `TEST_URL=http://127.0.0.1:5174 node tests/navigation-browser.mjs`: 320/390/1280px 통과. 모바일 폭은 터치·모바일 에뮬레이션 사용. 공개 전·후 평가 없는 이동, 이전 카드 왕복과 재가림, 기록 보존과 미평가 유지, 평가 자동 이동, Tab/Enter, 마지막 결과 보기, 가로 넘침 및 pageerror 없음을 확인했다. 390px 스크린샷 시각 검토 완료.
+- 같은 TEST_URL과 `BROWSER_CHANNEL=chromium`으로 `node tests/browser.mjs`, `node tests/ui-browser.mjs`, `node tests/order-browser.mjs` 모두 통과. 기존 목록·저장·모드 독립성·모바일 UI·순서 선택 회귀 검증.
+- 브라우저 실행 파일은 기존 설치된 Chromium을 사용했다. 실제 Android/iOS 기기·스크린리더·TTS·설치 및 공개 배포 검증은 이번에 수행하지 않았다.
